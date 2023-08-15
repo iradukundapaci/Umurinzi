@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'webapp/css/style.css' %}" />
+    <script src="{% static 'webapp/js/jquery.js'%}"></script>
+    {% block link %}{% endblock %}
+    <link
+      href="{% static 'webapp/bootstrap/css/bootstrap.min.css' %}"
+      rel="stylesheet"
+    />
+    <script src="{% static 'webapp/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <title>UMURINZI</title>
+  </head>
+  <body>
+    {% block header %}
+    <header>
+      <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img
+              src="{% static 'webapp/assets/logo3.jpeg' %}"
+              alt="Logo"
+              width="30"
+              height="30"
+              class="d-inline-block align-text-top"
+            />
+            UMURINZI
+          </a>
+          <ul class="nav justify-content-end">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="{% url 'home' %}"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Validate Item</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    {% endblock %} {% block main %}
+    <main>
+      {% block search %}
+      <div class="pt-2">
+        <form
+          id="search-form"
+          class="d-sm-flex justify-content-center"
+          role="search"
+          method="post"
+        >
+          {% csrf_token %}
+          <input
+            id="search-input"
+            class="form-control me-2"
+            type="search"
+            placeholder="Search.."
+            aria-label="Search"
+          />
+          <button class="btn btn-primary btn-sm" type="submit">Search</button>
+        </form>
+      </div>
+      {% endblock %}
+      <div id="main-content" class="d-flex justify-content-between">
+        {% block sidebar %} {% endblock %} {% block content %} {% endblock %}
+      </div>
+    </main>
+    {% endblock %} {% block footer %}
+    <footer>
+      <p class="text-primary text-center">
+        © Lost And Found, All Right Reserved.
+      </p>
+    </footer>
+    {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,15 @@
+{% extends "webapp/base.html" %} {% load static %} {% block link %}
+<link rel="stylesheet" href="{% static 'webapp/css/signup.css'%}" />
+{% endblock %} {%block main %}
+<main>
+  <div class="container-fluid p-0 d-flex justify-content-center">
+    <form class="border p-5" action="" method="post">
+      <h2>LOGIN</h2>
+      <h3>ENTER YOUR INFORMATION</h3>
+      {% csrf_token %} {{form.as_p}}
+      <button class="btn btn-primary mt-2">Submit</button>
+      <p>Don't have an account? <a href="./signup.html">SIGNUP HERE</a></p>
+    </form>
+  </div>
+</main>
+{% endblock %}

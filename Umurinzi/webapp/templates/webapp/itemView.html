@@ -1,0 +1,284 @@
+{% extends "webapp/base.html" %} {% load static %} {% block link %}
+<link rel="stylesheet" href="{% static 'webapp/css/viewItem.css'%}" />
+<script type="module" src="{% static 'webapp/js/location.js'%}"></script>
+<script type="module" src="{% static 'webapp/js/model.js'%}"></script>
+{% endblock %} {% block main%}
+<main>
+  <h2 class="mb-12 text-2xl text-center">Item Details</h2>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <div id="demo" class="carousel slide" data-bs-ride="carousel">
+          <!-- Indicators/dots -->
+          <div class="carousel-indicators">
+            <button
+              type="button"
+              data-bs-target="#demo"
+              data-bs-slide-to="0"
+              class="active"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#demo"
+              data-bs-slide-to="1"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#demo"
+              data-bs-slide-to="2"
+            ></button>
+          </div>
+
+          <!-- The slideshow/carousel -->
+          <div class="carousel-inner">
+            {% for image in images %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <img
+                src="{{ image.image.url }}"
+                class="d-block w-50"
+                alt="item image"
+              />
+            </div>
+            {% endfor %}
+          </div>
+
+          <!-- Left and right controls/icons -->
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#demo"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#demo"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="item-info">
+          <h2 class="mb-12 text-2xl text-center">{{ item.name }}</h2>
+          <p>{{ item.description }}</p>
+          <p>Category: {{ item.category }}</p>
+          <p>Location: {{ item.sub_category }}</p>
+          <p>Brand : {{ item.brand }}</p>
+          <p>Status : {{ item.status }}</p>
+        </div>
+        <div class="item-options d-flex justify-content-around">
+          {% if item.owner == request.user %}
+          <div>
+            <!-- Button trigger modal -->
+            <button
+              id="report-btn"
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#report-modal"
+            >
+              Report
+            </button>
+
+            <!-- Modal -->
+            <div
+              class="modal fade"
+              id="report-modal"
+              data-bs-backdrop="static"
+              data-bs-keyboard="false"
+              tabindex="-1"
+              aria-labelledby="staticBackdropLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                      Report Item
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <form
+                      id="report-form"
+                      action="{% url 'item_report' item_id=item.id%}"
+                      method="post"
+                    >
+                      {% csrf_token%}
+                      <select name="status" id="status">
+                        <option value="">select item status</option>
+                        <option value="LOST">Lost</option>
+                        <option value="STOLEN">Stolen</option>
+                      </select>
+                      <select
+                        name="province"
+                        maxlength="50"
+                        id="id_province"
+                      ></select>
+                      <select
+                        name="district"
+                        maxlength="50"
+                        id="id_district"
+                      ></select>
+                      <select
+                        name="sector"
+                        maxlength="50"
+                        id="id_sector"
+                      ></select>
+                      <p>
+                        <label for="id_date_time_field">Date time field:</label>
+                        <input
+                          type="datetime-local"
+                          name="date_time_field"
+                          required=""
+                          id="id_date_time_field"
+                        />
+                      </p>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      id="submit-report"
+                      type="submit"
+                      class="btn btn-danger"
+                    >
+                      Report
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <!-- Button trigger modal -->
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#update-modal"
+            >
+              Update
+            </button>
+
+            <!-- Modal -->
+            <div
+              class="modal fade"
+              id="update-modal"
+              data-bs-backdrop="static"
+              data-bs-keyboard="false"
+              tabindex="-1"
+              aria-labelledby="staticBackdropLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                      Update Item
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">Update item: {{item.name}}</div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancel
+                    </button>
+                    <a href="{% url 'item_update' item_id=item.id%}"
+                      ><button type="button" class="btn btn-danger">
+                        Update
+                      </button></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <!-- Button trigger modal -->
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#delete-modal"
+            >
+              Delete
+            </button>
+
+            <!-- Modal -->
+            <div
+              class="modal fade"
+              id="delete-modal"
+              data-bs-backdrop="static"
+              data-bs-keyboard="false"
+              tabindex="-1"
+              aria-labelledby="staticBackdropLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                      Modal title
+                    </h1>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <h3>Confirm deletion of: {{item.name}}</h3>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancel
+                    </button>
+                    <a href="{% url 'item_delete' item_id=item.id%}"
+                      ><button type="button" class="btn btn-danger">
+                        Delete
+                      </button></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {%else%}
+          <button>Claim Item</button>
+          {%endif%}
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

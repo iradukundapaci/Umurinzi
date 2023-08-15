@@ -1,0 +1,32 @@
+{% extends "webapp/base.html" %} {% load static %} {% block link %}
+<link rel="stylesheet" href="{% static 'webapp/css/signup.css'%}" />
+{% endblock %} {%block main %}
+<main>
+  <div class="container-fluid p-0 d-flex justify-content-center mt-2">
+    <form id="signup-form" class="border p-5 w-50" action="" method="post">
+      <h2>SIGNUP</h2>
+      {% csrf_token %}
+      <label for="user_id" class="form-label d-block">National ID Number</label
+      >{{form.user_id}}
+      <label for="first_name" class="form-label d-block">First Name</label>
+      {{form.first_name}}
+      <label for="last_name" class="form-label d-block">Last Name</label>
+      {{form.last_name}}
+      <label for="tel_no" class="form-label d-block">Telephone Number</label>
+      {{form.tel_no}}
+      <label for="password1" class="form-label d-block">Password</label>
+      {{form.password1}}
+      <label for="password2" class="form-label d-block">Confirm Password</label>
+      {{form.password2}}
+      <button
+        id="signup-btn"
+        class="btn btn-primary mt-2 d-block"
+        type="Submit"
+      >
+        Submit
+      </button>
+      <p>Aleady have an account? <a href="{% url 'login' %}">LOGIN HERE</a></p>
+    </form>
+  </div>
+</main>
+{% endblock %}

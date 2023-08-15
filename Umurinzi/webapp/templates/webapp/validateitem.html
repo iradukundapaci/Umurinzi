@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Check Stolen Item</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Check if an item is stolen</h1>
+    <form id="checkForm">
+      Item Name: <input type="text" name="item_name" /><br />
+      Category: <input type="text" name="category_name" /><br />
+      Special ID: <input type="text" name="special_id_value" /><br />
+      <input type="submit" value="Check" />
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+      $(document).ready(function () {
+        $("#checkForm").submit(function (e) {
+          e.preventDefault();
+          var form_data = $(this).serialize();
+          $.ajax({
+            url: "/check-stolen-item/",
+            type: "POST",
+            data: form_data,
+            dataType: "json",
+            success: function (response) {
+              $("#result").text(response.message);
+            },
+            error: function (xhr, status, error) {
+              console.error(xhr.responseText);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

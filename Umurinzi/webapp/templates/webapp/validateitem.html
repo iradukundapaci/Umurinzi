@@ -1,39 +1,84 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Check Stolen Item</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  </head>
-  <body>
-    <h1>Check if an item is stolen</h1>
-    <form id="checkForm">
-      Item Name: <input type="text" name="item_name" /><br />
-      Category: <input type="text" name="category_name" /><br />
-      Special ID: <input type="text" name="special_id_value" /><br />
-      <input type="submit" value="Check" />
+{% extends "webapp/base.html" %} {% load static %} {% block link %}
+<link rel="stylesheet" href="{% static 'webapp/css/report.css'%}" />
+{% endblock %} {% block header%}
+<header>
+  <nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img
+          src="{% static 'webapp/assets/logo3.jpeg' %}"
+          alt="Logo"
+          width="30"
+          height="30"
+          class="d-inline-block align-text-top"
+        />
+        UMURINZI
+      </a>
+      <ul class="nav justify-content-end">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{% url 'user_home' %}"
+            >Home</a
+          >
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle active"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            >REGISTER</a
+          >
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="{% url 'register_new_item'%}"
+                >NEW ITEM</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'register_found_item' %}"
+                >FOUND ITEM</a
+              >
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            >{{request.user.first_name}}</a
+          >
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="#">Settings</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+{% endblock%} {% block main %}
+<main>
+  <div class="container-fluid p-0 d-flex justify-content-center mb-5">
+    <div class="search-container bg-light">
+      <h2 class="text-primary">Validate Item</h2>
+    </div>
+  </div>
+  <div class="container-fluid p-0 d-flex justify-content-center">
+    <form
+      class="border p-5"
+      action=""
+      enctype="multipart/form-data"
+      method="post"
+    >
+      {%csrf_token%} {{form.as_p}} {{id_form.as_p}}
+      <button class="btn btn-primary mt-2">Submit</button>
     </form>
-
-    <div id="result"></div>
-
-    <script>
-      $(document).ready(function () {
-        $("#checkForm").submit(function (e) {
-          e.preventDefault();
-          var form_data = $(this).serialize();
-          $.ajax({
-            url: "/check-stolen-item/",
-            type: "POST",
-            data: form_data,
-            dataType: "json",
-            success: function (response) {
-              $("#result").text(response.message);
-            },
-            error: function (xhr, status, error) {
-              console.error(xhr.responseText);
-            },
-          });
-        });
-      });
-    </script>
-  </body>
-</html>
+  </div>
+</main>
+{% endblock %}

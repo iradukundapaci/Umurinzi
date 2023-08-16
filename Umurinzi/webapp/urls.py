@@ -20,5 +20,6 @@ urlpatterns = [
     path("userhome/item/report/<int:item_id>", report_item, name="item_report"),
     path("userhome/item/delete/<int:item_id>", delete_item, name="item_delete"),
     path("userhome/item/update/<int:item_id>", update_item, name="item_update"),
-    path('check-stolen-item/', check_stolen_item, name='check_stolen_item'),
+    path("claimitem/<int:item_id>", claim_item, name="claim_item"),
+    path('validateitem/', validateItem, name='validate_item'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

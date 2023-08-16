@@ -19,14 +19,16 @@ class SpecialIDForm(forms.ModelForm):
         model = SpecialId
         fields = ['number_type', 'number_value']
 
-SpecialId_set = forms.modelformset_factory(SpecialId, form=SpecialIDForm, extra=3, max_num=3, can_delete=True)
+SpecialId_set = forms.modelformset_factory(SpecialId, form=SpecialIDForm, extra=3, max_num=3)
+updateId_set = forms.modelformset_factory(SpecialId, form=SpecialIDForm, extra=3, max_num=3, validate_max=False, validate_min=False, can_delete=True)
 
 class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ["image"]
 
-Image_set = forms.modelformset_factory(Image, fields=["image"], extra=3, max_num=3, can_delete=True)
+Image_set = forms.modelformset_factory(Image, fields=["image"], extra=3, max_num=3)
+updateImage_set = forms.modelformset_factory(Image, fields=["image"], extra=3, max_num=3, validate_max=False, validate_min=False, can_delete=True)
 
 class UserRegisterItem(forms.ModelForm):
     class Meta:
@@ -41,3 +43,8 @@ class UserFoundItem(forms.ModelForm):
     class Meta:
         model = Item
         fields = ["name", "description", "category", "sub_category", "brand", "province", "district", "sector", "date_time_field" ]
+
+class ValidateItem(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = ["name", "category", "sub_category", "brand"]

@@ -274,7 +274,11 @@
             </div>
           </div>
           {%else%}
-          <button>Claim Item</button>
+          <a href="{% url 'claim_item' item_id=item.id%}"
+            ><button type="button" class="btn btn-primary">
+              Claim Item
+            </button></a
+          >
           {%endif%}
         </div>
       </div>

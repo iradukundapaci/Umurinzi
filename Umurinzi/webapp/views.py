@@ -222,23 +222,51 @@ def searchItem(request):
         return JsonResponse(json_obj, safe=False)
 
 
-def check_stolen_item(request):
+def validateItem(request):
     """ Validate Item
         return:
             jsonResponse: message
     """
     if request.method == 'POST':
-        item_name = request.POST.get('item_name')
-        category_name = request.POST.get('category_name')
-        special_id_value = request.POST.get('special_id_value')
+        id_form = SpecialId_set(request.POST)
+        form = ValidateItem(request.POST)
+        if id_form.is_valid() and form.is_valid():
+            item_name = form.cleaned_data.get('name')
+            subcategory = form.cleaned_data.get('sub_category')
+            brand = form.cleaned_data.get('brand')
+            values = [form.cleaned_data.get("number_value") for form in id_form if form.cleaned_data.get("number_value") is not None]
 
-        # Check if the item exists in the LostItem table based on item name, category, and special id.
-        if Report.objects.filter(item_id__name=item_name, item_id__category__name=category_name, item_id__specialid__number_value=special_id_value).exists():
-            return JsonResponse({"message": "The item is marked as stolen.", "status": "stolen"})
+            if SpecialId.objects.filter(item_id__name__contains=item_name, item_id__sub_category=subcategory, item_id__status__in=["STOLEN","LOST"], number_value__in=values).exists():
+                return JsonResponse({"message": "The item is marked as stolen.", "status": "stolen"})
+            else:
+                return JsonResponse({"message": "The item is not stolen.", "status": "not_stolen"})
         else:
-            return JsonResponse({"message": "The item is not stolen.", "status": "not_stolen"})
+            print(form.is_valid())
+            print(id_form.is_valid())
 
-    return render(request, "webapp/validateitem.html")
+    form = ValidateItem()
+    id_form = SpecialId_set(queryset=SpecialId.objects.none())
+    return render(request, "webapp/validateitem.html", {"form":form, "id_form": id_form})
+
+@login_required
+def claim_item(request, item_id):
+    """ claim Item
+        return:
+            jsonResponse: message
+    """
+    lost_item = Item.objects.get(pk=item_id)
+    report_entry = Report.objects.filter(item_id=lost_item, item_id__status="FOUND")
+    lost_sp_id = SpecialId.objects.filter(item_id=lost_item)
+    
+    if lost_sp_id is not None:
+        values = [spid.number_value for spid in lost_sp_id]
+        user_items = SpecialId.objects.filter(number_value__in=values).exclude(item_id=lost_item)
+        if user_items is not None:
+            return JsonResponse({"message": "Item claimable", "item_id":user_items[0].item_id.name})
+    
+        
+    return JsonResponse({"message": "item not claimable"})
+
 
 @login_required
 def delete_item(request, item_id):
@@ -288,16 +316,16 @@ def update_item(request, item_id):
     """
     instance = get_object_or_404(Item, pk=item_id)
     if request.method == "POST":
-        id_form = SpecialId_set(request.POST, request.FILES)
+        id_form = updateId_set(request.POST, request.FILES)
         form = UserRegisterItem(request.POST, request.FILES)
-        image_form = Image_set(request.POST, request.FILES)
+        image_form = updateImage_set(request.POST, request.FILES)
         if form.is_valid() and id_form.is_valid() and image_form.is_valid():
             print("valid")
             instance.name = form.cleaned_data["name"]
             instance.description = form.cleaned_data["description"]
             instance.category = form.cleaned_data["category"]
             instance.sub_category = form.cleaned_data["sub_category"]
-            instance.brand = brand=form.cleaned_data["brand"]
+            instance.brand = form.cleaned_data["brand"]
             instance.save()
             Image.objects.filter(item_id=item_id).delete()
             SpecialId.objects.filter(item_id=item_id).delete()
@@ -312,11 +340,12 @@ def update_item(request, item_id):
                     register_id.save()
 
         else:
-            print(form.errors)
-            # print(id_form.errors)
-            print(image_form.errors)
+            print("faild")
+            # print("form errors",form.is_valid())
+            print("id errors",id_form.errors)
+            print("image errors",image_form.errors)
         return redirect("user_home")
-    id_form = SpecialId_set(queryset=SpecialId.objects.none())
+    id_form = updateId_set(queryset=SpecialId.objects.filter(item_id=instance))
     form = UserRegisterItem(instance=instance)
-    image_form = Image_set(queryset=Image.objects.filter(item_id=item_id))
-    return render(request, "webapp/registerNewItem.html", {"id_form":id_form, "form":form, "image_form": image_form})
+    image_form = updateImage_set(queryset=Image.objects.filter(item_id=instance))
+    return render(request, "webapp/updateItem.html", {"id_form":id_form, "form":form, "image_form": image_form})

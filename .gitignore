@@ -7,7 +7,6 @@ __pycache__/
 *.pot
 *.pyc
 db.sqlite3
-media/
 
 # Ignore the virtual environment directory
 venv/
@@ -20,6 +19,6 @@ Scripts/
 .vscode/
 
 # Ignore any other files or directories you want to exclude
-./Lost_and_Found/images/
-./Lost_and_Found/receipts/
-./Lost_and_Found/db.sqlite3
+Umurinzi/images/*
+Umurinzi/webapp/static/webapp/bootstrap/*
+Umurinzi/webapp/static/webapp/js/jquery.js

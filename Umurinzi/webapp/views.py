@@ -20,6 +20,7 @@ def signup(request):
     """
     if request.method == "POST":
         form = Signup_form(request.POST)
+        print("hello")
         if form.is_valid():
             user = form.save()
             profile = UserProfile()

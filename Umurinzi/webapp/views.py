@@ -183,8 +183,7 @@ def retrieveItems(request):
         return:
             jsonResponse: retieved items
     """
-    STATUS = ["FOUND", "LOST"]
-    items = Item.objects.filter(status__in=STATUS).prefetch_related('image_set').all()
+    items = Item.objects.filter(status="FOUND").prefetch_related('image_set').all()
     json_obj = []
 
     for item in items:

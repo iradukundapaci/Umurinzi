@@ -3,8 +3,11 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import *
 from .models import *
+import json
 from django.core import serializers
 from django.http import JsonResponse
+from django.contrib import messages
+
 
 
 
@@ -41,6 +44,7 @@ def userHome(request):
     containing the user's items 
     """
     items = Item.objects.filter(status="Found").prefetch_related('image_set').all()
+    print(items)
     return render(request, "webapp/userHome.html", {"items":items})
 
 @login_required
@@ -237,9 +241,16 @@ def validateItem(request):
             values = [form.cleaned_data.get("number_value") for form in id_form if form.cleaned_data.get("number_value") is not None]
 
             if SpecialId.objects.filter(item_id__name__contains=item_name, item_id__sub_category=subcategory, item_id__status__in=["STOLEN","LOST"], number_value__in=values).exists():
-                return JsonResponse({"message": "The item is marked as stolen.", "status": "stolen"})
+                message_object = {"message": "The item is marked as stolen.", "status": "stolen"}
+
+                serialized_message = json.dumps(message_object)
+                messages.info(request, serialized_message)
             else:
-                return JsonResponse({"message": "The item is not stolen.", "status": "not_stolen"})
+                message_object = {"message": "The item is not stolen.", "status": "not_stolen"}
+
+                serialized_message = json.dumps(message_object)
+                messages.info(request, serialized_message)
+               
         else:
             print(form.is_valid())
             print(id_form.is_valid())

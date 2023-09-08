@@ -23,7 +23,6 @@ def signup(request):
     """
     if request.method == "POST":
         form = Signup_form(request.POST)
-        print("hello")
         if form.is_valid():
             user = form.save()
             profile = UserProfile()
@@ -44,8 +43,16 @@ def userHome(request):
     containing the user's items 
     """
     items = Item.objects.filter(status="Found").prefetch_related('image_set').all()
-    print(items)
-    return render(request, "webapp/userHome.html", {"items":items})
+    return render(request, "webapp/index.html", {"items":items})
+
+
+@login_required
+def manageItems(request):
+    """
+    this function is used to render the user items
+    """
+    items = Item.objects.filter(owner=request.user).prefetch_related('image_set').all()
+    return render(request, "webapp/manageItem.html", {"items":items})
 
 @login_required
 def registerItem(request):
@@ -92,7 +99,6 @@ def registerFoundItem(request):
         form = UserFoundItem(request.POST, request.FILES)
         image_form = Image_set(request.POST, request.FILES)
         if form.is_valid() and id_form.is_valid() and image_form.is_valid():
-            print("it is valid")
             item = Item(name=form.cleaned_data["name"],
                         description=form.cleaned_data["description"],
                         category=form.cleaned_data["category"],
@@ -203,6 +209,29 @@ def retrieveItems(request):
 
     return JsonResponse(json_obj, safe=False)
 
+
+def retrieveRegisteredItems(request):
+    """ Retrieves Registered Items
+        return:
+            jsonResponse: retieved items
+    """
+    items = Item.objects.filter(status="OWN", owner=request.user).prefetch_related('image_set').all()
+    json_obj = []
+
+    for item in items:
+        images = item.image_set.all()
+        item_dict = {
+            "id": item.id,
+            "name": item.name,
+            "description": item.description,
+            "image": images[0].image.url,
+        }
+        json_obj.append(item_dict)
+
+
+    return JsonResponse(json_obj, safe=False)
+
+
 def searchItem(request):
     """ search for Item
         return:
@@ -265,18 +294,19 @@ def claim_item(request, item_id):
         return:
             jsonResponse: message
     """
-    lost_item = Item.objects.get(pk=item_id)
-    report_entry = Report.objects.filter(item_id=lost_item, item_id__status="FOUND")
-    lost_sp_id = SpecialId.objects.filter(item_id=lost_item)
-    
-    if lost_sp_id is not None:
-        values = [spid.number_value for spid in lost_sp_id]
-        user_items = SpecialId.objects.filter(number_value__in=values).exclude(item_id=lost_item)
-        if user_items is not None:
-            return JsonResponse({"message": "Item claimable", "item_id":user_items[0].item_id.name})
-    
-        
-    return JsonResponse({"message": "item not claimable"})
+    if request.method == 'POST':
+        lost_item = Item.objects.get(pk=item_id)
+        lost_sp_id = SpecialId.objects.filter(item_id=lost_item)
+
+        if lost_sp_id:
+            values = [spid.number_value for spid in lost_sp_id]
+            user_items = SpecialId.objects.filter(number_value__in=values).exclude(item_id=lost_item)
+            if user_items:
+                user_profile = UserProfile.objects.filter(user_id=user_items[0].item_id.owner.id)
+                user = {"Names": user_profile[0].first_name + " "+ user_profile[0].last_name, "tel_no": user_profile[0].tel_no}
+                return JsonResponse({"message": "Item claimable", "user":user})
+            else:
+                return JsonResponse({"message": "item not claimable"})
 
 
 @login_required
@@ -331,7 +361,6 @@ def update_item(request, item_id):
         form = UserRegisterItem(request.POST, request.FILES)
         image_form = updateImage_set(request.POST, request.FILES)
         if form.is_valid() and id_form.is_valid() and image_form.is_valid():
-            print("valid")
             instance.name = form.cleaned_data["name"]
             instance.description = form.cleaned_data["description"]
             instance.category = form.cleaned_data["category"]

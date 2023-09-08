@@ -62,7 +62,7 @@ class UserProfile(models.Model):
       
 class Item(models.Model):
     """ Model for Item"""
-    brand_choices = [('SAMSUNG', 'SAMSUNG'),('TECNO','TECNO')]
+    brand_choices = [('SAMSUNG', 'SAMSUNG'),('TECNO','TECNO'), ('IPHONE','IPHONE'), ('HP', 'HP'), ('ITEL','ITEL'), ('OTHER', 'OTHER')]
     status_choice = [("OWN", "Own"), ('LOST', 'Lost'), ('FOUND', 'Found'), ('STOLEN', 'Stolen'), ('PENDING', 'Pending'), ('DELETED', 'Deleted')]
 
     name = models.CharField(max_length=100)
@@ -91,6 +91,8 @@ class SpecialId(models.Model):
     """ Model for Item identifying numbers"""
     types = [("SN", "Serial Number"),
              ("IMEI", "IMEI"),
+             ("CN", "Card Number"),
+             ("MAC", "MAC Address")
             ]
     item_id = models.ForeignKey("Item", on_delete=models.CASCADE) 
     number_type = models.CharField(max_length=100, choices=types)
@@ -98,7 +100,7 @@ class SpecialId(models.Model):
 
     def __str__(self) -> str:
         """ Model string replesantation"""
-        return self.number_value
+        return self.item_id.name + ' ' +self.number_type
 
 class ItemCategory(models.Model):
     """ Model for Item Category"""

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-qk#rzb$1=xm)^+5!9=$h@27bo_pld1z@8l9i!+_mr@j$tev7v^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["umurinzi.onrender.com", "localhost"]
+ALLOWED_HOSTS = ["umurinzi.onrender.com", "127.0.0.1"]
 
 
 # Application definition
@@ -116,7 +116,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'webapp/static/'
+STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "webapp/static",
+]
 
 LOGIN_REDIRECT_URL  = 'user_home'
 LOGOUT_REDIRECT_URL = 'user_home'

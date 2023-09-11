@@ -116,11 +116,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'webapp/static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "webapp/static",
-]
 
 LOGIN_REDIRECT_URL  = 'user_home'
 LOGOUT_REDIRECT_URL = 'user_home'

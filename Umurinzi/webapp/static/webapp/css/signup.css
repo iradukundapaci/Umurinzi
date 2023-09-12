@@ -3,3 +3,20 @@
   flex-direction: column;
   justify-content: center;
 }
+
+#login-form {
+  height: 80vh;
+}
+
+#form-title {
+  text-align: center;
+}
+
+input {
+  width: 400px;
+  display: block;
+}
+
+button {
+  width: 400px;
+}

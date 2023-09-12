@@ -1,102 +1,37 @@
-/* .search-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40%;
-  height: 20px;
-  border-radius: 20px;
-  background-color: #f1f1f1;
-  overflow: hidden;
+#sidebar {
+  border-right: 1px solid aliceblue;
 }
 
-.search-filter {
-  color: white;
+#sidebar-title {
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+#sidebar ul {
+  list-style-type: none;
+  text-decoration: none;
+}
+
+.subcategories {
+  text-decoration: none;
+}
+
+li .category-btn {
+  height: 30px;
+  width: 100px;
+  margin: 5px 0;
+  padding: 0;
+  text-align: left;
+}
+
+.subcategory-list {
+  text-decoration: none;
+}
+
+li .list-group-item {
+  background-color: aliceblue;
   border: none;
-  outline: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 20px 0 0 20px;
-  font-size: 16px;
+  border-bottom: 1px solid grey;
+  height: 30px;
+  width: 150px;
 }
-
-.search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 10px;
-  font-size: 16px;
-}
-
-.search-button {
-  color: white;
-  border: none;
-  outline: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 0 20px 20px 0;
-  font-size: 16px;
-} */
-
-/* contet css */
-/* .container {
-  padding: 100px 0;
-}
-
-.sidebar {
-  width: 300px;
-  height: 500px;
-  background-color: #f1f1f1;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.content {
-  display: flex;
-  flex-wrap: wrap;
-  width: 1000px;
-}
-
-.item {
-  width: 200px;
-  margin: 0 10px 10px 0;
-  padding: 10px;
-  background-color: #f9f9f9;
-}
-a {
-  text-decoration: none !important;
-  color: black !important;
-}
-
-.item-title {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.item-description {
-  margin-bottom: 5px;
-}
-
-.item-price {
-  font-size: 14px;
-  color: #888;
-}
-
-.pagination-button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  outline: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  margin: 0 5px;
-}
-
-.pagination-button:hover {
-  background-color: #45a049;
-}
-
-.page-number {
-  display: flex;
-  align-items: center;
-} */

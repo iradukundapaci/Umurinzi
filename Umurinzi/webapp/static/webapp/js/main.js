@@ -95,10 +95,10 @@ $(document).ready(function () {
         success: function (data) {
             const categoryList = $(".category-list");
             data.forEach(function (category) {
-                const categoryItem = $("<li><button type='button' class='category-btn' data-category-id='" + category.id + "'>" + category.name + "</button></li>");
+                const categoryItem = $("<li><button type='button' class='category-btn btn' data-category-id='" + category.id + "'>" + category.name + "</button></li>");
                 const subcategoryList = $("<ul class='subcategory-list'></ul>");
                 category.subcategories.forEach(function (subcategory) {
-                    const subcategoryItem = $("<li><a href='#' class='subcategories' category_id=" + category.id + " subcategory_id=" + subcategory.id + ">" + subcategory.name + "</a></li>");
+                    const subcategoryItem = $("<li><a href='#' class='subcategories list-group-item' category_id=" + category.id + " subcategory_id=" + subcategory.id + ">" + subcategory.name + "</a></li>");
                     subcategoryList.append(subcategoryItem);
                 });
                 categoryItem.append(subcategoryList);

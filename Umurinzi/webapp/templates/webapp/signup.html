@@ -4,7 +4,7 @@
 <main>
   <div class="container-fluid p-0 d-flex justify-content-center mt-2">
     <form id="signup-form" class="border p-5 w-50" action="" method="post">
-      <h2>SIGNUP</h2>
+      <h2 id="form-title">SIGNUP</h2>
       {% csrf_token %}
       <label for="user_id" class="form-label d-block">National ID Number</label
       >{{form.user_id}}
@@ -20,12 +20,12 @@
       {{form.password2}}
       <button
         id="signup-btn"
-        class="btn btn-primary mt-2 d-block"
+        class="btn btn-primary mt-3 mb-2 d-block"
         type="submit"
       >
         Submit
       </button>
-      <p>Aleady have an account? <a href="{% url 'login' %}">LOGIN HERE</a></p>
+      <p>Aleady have an account? <a href="{% url 'login' %}">Click here</a></p>
     </form>
   </div>
 </main>

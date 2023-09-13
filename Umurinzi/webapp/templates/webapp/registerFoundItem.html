@@ -1,13 +1,8 @@
 {% extends "webapp/base.html" %} {% load static %} {% block link %}
-<link rel="stylesheet" href="{% static 'webapp/css/report.css'%}" />
+<link rel="stylesheet" href="{% static 'webapp/css/signup.css'%}" />
 <script type="module" src="{% static 'webapp/js/location.js'%}"></script>
 {% endblock %} {% block main %}
 <main>
-  <div class="container-fluid p-0 d-flex justify-content-center mb-5">
-    <div class="search-container bg-light">
-      <h2 class="text-primary">REPORT FOUND ITEM</h2>
-    </div>
-  </div>
   <div class="container-fluid p-0 d-flex justify-content-center">
     <form
       class="border p-5"
@@ -16,7 +11,7 @@
       enctype="multipart/form-data"
     >
       {% csrf_token%}
-      <h3>REGISTER ITEM</h3>
+      <h3>Report Found Item</h3>
       {{form.as_p}} {{id_form.as_p}} {{image_form.as_p}}
       <button class="btn btn-primary mt-2">Submit</button>
     </form>

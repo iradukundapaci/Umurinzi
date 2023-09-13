@@ -1,16 +1,22 @@
 {% extends "webapp/base.html" %} {% load static %} {% block link %}
 {% load json_filters %}
-<link rel="stylesheet" href="{% static 'webapp/css/signup.css'%}" />
+<link rel="stylesheet" href="{% static 'webapp/css/report.css'%}" />
 {% endblock %} {% block main %}
 <main>
+  <div class="container-fluid p-0 d-flex justify-content-center mb-5">
+    <div class="search-container bg-light">
+      <h2 class="text-primary">Validate Item</h2>
+    </div>
+  </div>
+  
+  
   <div class="container-fluid p-0 d-flex justify-content-center">
     <form
-    class="border p-5"
-    action=""
-    enctype="multipart/form-data"
-    method="post"
+      class="border p-5"
+      action=""
+      enctype="multipart/form-data"
+      method="post"
     >
-    <h2>Validate Item</h2>
       {%csrf_token%} {{form.as_p}} {{id_form.as_p}}
       <button class="btn btn-primary mt-2">Submit</button>
 

@@ -215,7 +215,7 @@ def retrieveRegisteredItems(request):
         return:
             jsonResponse: retieved items
     """
-    items = Item.objects.filter(status="OWN", owner=request.user).prefetch_related('image_set').all()
+    items = Item.objects.filter(owner=request.user).prefetch_related('image_set').all()
     json_obj = []
 
     for item in items:
@@ -227,7 +227,6 @@ def retrieveRegisteredItems(request):
             "image": images[0].image.url,
         }
         json_obj.append(item_dict)
-
 
     return JsonResponse(json_obj, safe=False)
 
@@ -300,13 +299,16 @@ def claim_item(request, item_id):
 
         if lost_sp_id:
             values = [spid.number_value for spid in lost_sp_id]
-            user_items = SpecialId.objects.filter(number_value__in=values).exclude(item_id=lost_item)
+            user_items = SpecialId.objects.filter(number_value__in=values)
             if user_items:
+                print(user_items)
                 user_profile = UserProfile.objects.filter(user_id=user_items[0].item_id.owner.id)
                 user = {"Names": user_profile[0].first_name + " "+ user_profile[0].last_name, "tel_no": user_profile[0].tel_no}
-                return JsonResponse({"message": "Item claimable", "user":user})
+                res = {"message": "claimable", "user":user}
             else:
-                return JsonResponse({"message": "item not claimable"})
+                res = {"message": "not claimable"}
+
+            return JsonResponse(res)
 
 
 @login_required
@@ -380,8 +382,7 @@ def update_item(request, item_id):
                     register_id.save()
 
         else:
-            print("faild")
-            # print("form errors",form.is_valid())
+            print("form errors",form.is_valid())
             print("id errors",id_form.errors)
             print("image errors",image_form.errors)
         return redirect("user_home")

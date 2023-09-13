@@ -1,5 +1,5 @@
 {% extends "webapp/base.html" %} {% load static %} {% block link %}
-<link rel="stylesheet" href="{% static 'webapp/css/viewItem.css'%}" />
+<link rel="stylesheet" href="{% static 'webapp/css/report.css'%}" />
 <script type="module" src="{% static 'webapp/js/location.js'%}"></script>
 <script type="module" src="{% static 'webapp/js/model.js'%}"></script>
 {% endblock %} {% block main%}
@@ -154,7 +154,7 @@
                       Cancel
                     </button>
                     <button
-                      id="submit-report"
+                      id="report-form-btn"
                       type="submit"
                       class="btn btn-danger"
                     >
@@ -243,7 +243,7 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                      Modal title
+                      Item Detail
                     </h1>
                     <button
                       type="button"
@@ -276,12 +276,12 @@
           {%else%}
           <!-- Button trigger modal -->
           <button
-            id="claim-btn"
+            id="claim-form-btn"
             type="button"
             class="btn btn-primary"
             data-bs-toggle="modal"
-            data-bs-target="#staticBackdrop"
-            data-item-id="{{ item_id }}"
+            data-bs-target=""
+            data-item-id="{{ item.id }}"
           >
             Claim Item
           </button>
@@ -300,7 +300,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                    Modal title
+                    Claim Detail
                   </h1>
                   <button
                     type="button"
@@ -309,7 +309,9 @@
                     aria-label="Close"
                   ></button>
                 </div>
-                <div class="modal-body">...</div>
+                <div id="claim-body" class="modal-body">
+                  You are not allowed to claim item
+                </div>
                 <div class="modal-footer">
                   <button
                     type="button"
@@ -317,9 +319,6 @@
                     data-bs-dismiss="modal"
                   >
                     Close
-                  </button>
-                  <button type="button" class="btn btn-primary">
-                    Understood
                   </button>
                 </div>
               </div>

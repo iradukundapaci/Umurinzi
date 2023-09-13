@@ -12,11 +12,18 @@
   text-align: center;
 }
 
-input {
+input,
+label,
+select {
   width: 400px;
   display: block;
 }
 
 button {
+  width: 400px;
+}
+
+#id_description {
+  height: 50px;
   width: 400px;
 }
